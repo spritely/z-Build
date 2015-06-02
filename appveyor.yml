@@ -14,11 +14,7 @@ install:
 nuget:
   disable_publish_on_pr: true
 
-build:
-  project: Source\Build.proj
-  publish_nuget: true
-  parallel: true
-  verbosity: normal
+build: off
 
 after_test:
   - nuget pack "%APPVEYOR_BUILD_FOLDER%\Source\Build.nuspec" -BasePath "%APPVEYOR_BUILD_FOLDER%\Source" -Properties "Version=%semantic_version%" -OutputDirectory "%TEMP%"

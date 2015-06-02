@@ -42,11 +42,6 @@
   </PropertyGroup>
 
   <Import Project="Projects.targets" />
-  <!-- Default is to build all C# projects in the tree, this can be customized as needed. -->
-
-  <ItemGroup>
-    <Projects Include="$(SourceRootPath)**\*.csproj;$(SourceRootPath)**\*.vbproj" />
-  </ItemGroup>
 
   <!-- Do not change this line as it pulls in the main build system. -->
   <Import Project="$(BuildRootPath)MainBuild.targets" Condition="'$(MainBuildImported)' != 'true'" />
