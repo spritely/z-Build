@@ -23,6 +23,7 @@ assembly_info:
   assembly_informational_version: '$(semantic_version)'
 
 build:
+  project: Source\Build.proj
   publish_nuget: true
   parallel: true
   verbosity: normal
