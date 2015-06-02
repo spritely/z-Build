@@ -14,11 +14,6 @@ install:
 nuget:
   disable_publish_on_pr: true
 
-build:
-  publish_nuget: true
-  parallel: true
-  verbosity: normal
-
 after_test:
   - nuget pack "%APPVEYOR_BUILD_FOLDER%\Source\Build.nuspec" -BasePath "%APPVEYOR_BUILD_FOLDER%\Source" -Properties "Version=%semantic_version%" -OutputDirectory "%TEMP%"
   - appveyor PushArtifact "%TEMP%\Spritely.Build.%semantic_version%.nupkg"
