@@ -1,0 +1,16 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- If this file changes force a rebuild -->
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <!-- At this point both the command line execution of msbuild Build.proj and Visual Studio
+       builds have been unified in how they import msbuild project files.
+       See: Before.Microsoft.Common.targets for more information
+  -->
+
+  <!-- This is near the end of all our possible injection points and is probably the safest
+       place to import additional build customizations. -->
+  <Import Project="$(SourceRootPath)*.ProjectExtension.targets" />
+  <Import Project="$(PackagesRootPath)**\*.ProjectExtension.targets" />
+</Project>

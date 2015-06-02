@@ -1,0 +1,33 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" TreatAsLocalProperty="SourceRootPath;PackagesRootPath" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- If this file changes force a rebuild -->
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <!-- There are two paths into this file:
+       1. User runs msbuild Build.proj which runs msbuild on a variety of .csproj files passing
+          in CustomBeforeMicrosoftCommonTargets set to this file (see MainBuild.targets). 
+       2. User runs msbuild of a .csproj file or a Visual Studio build of a .csproj file
+          In this case the Microsoft.CSharp.targets imports BuildHook.targets because it has
+          been installed under a well-known path in the local file system. This file sets
+          CustomBeforeMicrosoftCommonTargets to this file.
+
+       At this point both the command line execution of msbuild Build.proj and Visual Studio
+       builds have been unified in how they import msbuild project files.
+  -->
+
+  <PropertyGroup>
+    <SourceRootPath Condition="'$(SourceRootPath)' != '' and !HasTrailingSlash('$(SourceRootPath)')">$(SourceRootPath)\</SourceRootPath>
+    <PackagesRootPath Condition="'$(PackagesRootPath)' != '' and !HasTrailingSlash('$(PackagesRootPath)')">$(PackagesRootPath)\</PackagesRootPath>
+  </PropertyGroup>
+
+  <!-- Importing this file within the context of a project build to set the BuildRootPath and
+       import Build.proj without code repetition -->
+  <Import Project="$(MSBuildThisFileDirectory)BuildHook.targets" />
+
+  <!-- Prefer using *.ProjectExtension.targets to *.ProjectExtension.BeforeCommon.targets.
+       However, sometimes it is necessary to run earlier in the MSBuild process so these
+       additional hooks are provided. -->
+  <Import Project="$(SourceRootPath)*.ProjectExtension.BeforeCommon.targets" />
+  <Import Project="$(PackagesRootPath)**\*.ProjectExtension.BeforeCommon.targets" />
+</Project>

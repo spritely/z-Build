@@ -1,0 +1,57 @@
+<Project ToolsVersion="4.0" TreatAsLocalProperty="SourceRootPath;PackagesRootPath;BuildRootPath" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- This file is installed on local machines. It should only ever contain the minimal amount of code to
+       provide the hook so Visual Studio can find the rest of the build files because each time it changes
+       users will need to perform one additional installation step. -->
+
+  <PropertyGroup>
+    <!-- If this file changes force a rebuild -->
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <!-- To avoid circular imports, importers can use Condition="'$(BuildHookImported)' != 'true'" -->
+    <BuildHookImported>true</BuildHookImported>
+  </PropertyGroup>
+
+  <!-- Locate and import Build.proj so it can be imported to obtain common property settings and find paths to other build files -->
+  <PropertyGroup>
+    <_SourceRootPath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), Build.proj))\</_SourceRootPath>
+    <_BuildProjectFilePath>$(_SourceRootPath)Build.proj</_BuildProjectFilePath>
+
+    <!-- Tell Build.proj to not import Main.Build.targets because it shouldn't override default build targets -->
+    <MainBuildImported>true</MainBuildImported>
+  </PropertyGroup>
+
+  <Import Project="$(_BuildProjectFilePath)" Condition="Exists('$(_BuildProjectFilePath)') and '$(BuildProjImported)' != 'true'" />
+
+    <!-- In case Build.proj gets edited by a user we force a minimal core set of settings -->
+  <PropertyGroup>
+    <BuildProjImported>true</BuildProjImported>
+  </PropertyGroup>
+
+  <!-- Minimal set of paths available throughout the build
+       All Spritely.Build paths follow the MSBuild convention of using paths ending with '\'
+       Duplicated in BuildHook.targets, but included here to resolve $(BuildRootPath) so targets can be located in Visual Studio -->
+  <PropertyGroup>
+    <BuildPackageName>Spritely.Build</BuildPackageName>
+    <BuildPackageVersion>0.1.0</BuildPackageVersion>
+    <SourceRootPath Condition="'$(SourceRootPath)' == ''">$(_SourceRootPath)</SourceRootPath>
+    <SourceRootPath Condition="!HasTrailingSlash('$(SourceRootPath)')">$(SourceRootPath)\</SourceRootPath>
+    <PackagesRootPath Condition="'$(PackagesRootPath)' == ''">$(SourceRootPath)packages\</PackagesRootPath>
+    <PackagesRootPath Condition="!HasTrailingSlash('$(PackagesRootPath)')">$(PackagesRootPath)\</PackagesRootPath>
+    <BuildRootPath Condition="'$(BuildRootPath)' == ''">$(PackagesRootPath)$(BuildPackageName).$(BuildPackageVersion)\</BuildRootPath>
+    <BuildRootPath Condition="!HasTrailingSlash('$(BuildRootPath)')">$(BuildRootPath)\</BuildRootPath>
+  </PropertyGroup>
+
+  <!-- This is the important part of this file, everything else is just to support these properties -->
+  <PropertyGroup>
+    <CustomBeforeMicrosoftCommonTargets>$(BuildRootPath)Before.Microsoft.Common.targets</CustomBeforeMicrosoftCommonTargets>
+    <CustomAfterMicrosoftCommonTargets>$(BuildRootPath)After.Microsoft.Common.targets</CustomAfterMicrosoftCommonTargets>
+  </PropertyGroup>
+
+  <!-- And a way to add this to the user's system and remove it -->
+  <Target Name="InstallBuildHook">
+    <Copy SourceFiles="$(MSBuildThisFileFullPath)" DestinationFolder="$(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.targets\ImportBefore" />
+  </Target>
+
+  <Target Name="UninstallBuildHook">
+    <Delete Files="$(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.targets\ImportBefore\$(MSBuildThisFile)" TreatErrorsAsWarnings="False" />
+  </Target>
+</Project>

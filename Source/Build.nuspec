@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>Spritely.Build</id>
+        <version>$version$</version>
+        <title>Spritely.Build</title>
+        <authors>Spritely</authors>
+        <owners>Spritely</owners>
+        <language>en-US</language>
+        <licenseUrl>https://github.com/spritely/Build/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/spritely/Build</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <summary>Simple .NET build system that you can install via NuGet.</summary>
+        <description>A build system that you can install via NuGet. It sets up hooks into the standard MSBuild files to provide a consisent command line and Visual Studio experience. It doesn't try to solve all your build problems. It just standardizes the code and provides a very simple extensibilty system. Name your file *.ProjectExtension.targets and install as a NuGet package and it will automatically be injected into all project files and run consistently on the command line and in Visual Studio.</description>
+        <copyright>Copyright (C) 2015</copyright>
+        <tags>Spritely Build .NET</tags>
+    </metadata>
+    <files>
+        <file src="*.proj" />
+        <file src="*.targets" />
+        <file src="tools\*.*" target="tools" />
+    </files>
+</package>
