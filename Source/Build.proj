@@ -32,9 +32,11 @@
        Duplicated in BuildHook.targets, but included here to resolve $(BuildRootPath) so targets can be located -->
   <PropertyGroup>
     <BuildPackageName>Spritely.Build</BuildPackageName>
-    <BuildPackageVersion>0.1.0</BuildPackageVersion>
+    <BuildPackageVersion>0.2.0</BuildPackageVersion>
     <SourceRootPath Condition="'$(SourceRootPath)' == ''">$(MsBuildThisFileDirectory)</SourceRootPath>
     <SourceRootPath Condition="!HasTrailingSlash('$(SourceRootPath)')">$(SourceRootPath)\</SourceRootPath>
+    <BuildExtensionsRootPath Condition="'$(BuildExtensionsRootPath)' == ''">$(SourceRootPath).build\</BuildExtensionsRootPath>
+    <BuildExtensionsRootPath Condition="!HasTrailingSlash('$(BuildExtensionsRootPath)')">$(BuildExtensionsRootPath)\</BuildExtensionsRootPath>
     <PackagesRootPath Condition="'$(PackagesRootPath)' == ''">$(SourceRootPath)packages\</PackagesRootPath>
     <PackagesRootPath Condition="!HasTrailingSlash('$(PackagesRootPath)')">$(PackagesRootPath)\</PackagesRootPath>
     <BuildRootPath Condition="'$(BuildRootPath)' == ''">$(PackagesRootPath)$(BuildPackageName).$(BuildPackageVersion)\</BuildRootPath>

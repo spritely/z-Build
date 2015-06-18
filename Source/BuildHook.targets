@@ -31,9 +31,11 @@
        Duplicated in BuildHook.targets, but included here to resolve $(BuildRootPath) so targets can be located in Visual Studio -->
   <PropertyGroup>
     <BuildPackageName>Spritely.Build</BuildPackageName>
-    <BuildPackageVersion>0.1.0</BuildPackageVersion>
+    <BuildPackageVersion>0.2.0</BuildPackageVersion>
     <SourceRootPath Condition="'$(SourceRootPath)' == ''">$(_SourceRootPath)</SourceRootPath>
     <SourceRootPath Condition="!HasTrailingSlash('$(SourceRootPath)')">$(SourceRootPath)\</SourceRootPath>
+    <BuildExtensionsRootPath Condition="'$(BuildExtensionsRootPath)' == ''">$(SourceRootPath).build\</BuildExtensionsRootPath>
+    <BuildExtensionsRootPath Condition="!HasTrailingSlash('$(BuildExtensionsRootPath)')">$(BuildExtensionsRootPath)\</BuildExtensionsRootPath>
     <PackagesRootPath Condition="'$(PackagesRootPath)' == ''">$(SourceRootPath)packages\</PackagesRootPath>
     <PackagesRootPath Condition="!HasTrailingSlash('$(PackagesRootPath)')">$(PackagesRootPath)\</PackagesRootPath>
     <BuildRootPath Condition="'$(BuildRootPath)' == ''">$(PackagesRootPath)$(BuildPackageName).$(BuildPackageVersion)\</BuildRootPath>
@@ -48,10 +50,12 @@
 
   <!-- And a way to add this to the user's system and remove it -->
   <Target Name="InstallBuildHook">
+    <Message Text="Installing hook for $(BuildPackageName) v$(BuildPackageVersion)" />
     <Copy SourceFiles="$(MSBuildThisFileFullPath)" DestinationFolder="$(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.targets\ImportBefore" />
   </Target>
 
   <Target Name="UninstallBuildHook">
+    <Message Text="Uninstalling hook for $(BuildPackageName) v$(BuildPackageVersion)" />
     <Delete Files="$(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.targets\ImportBefore\$(MSBuildThisFile)" TreatErrorsAsWarnings="False" />
   </Target>
 </Project>

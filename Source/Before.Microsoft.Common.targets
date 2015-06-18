@@ -29,5 +29,5 @@
        However, sometimes it is necessary to run earlier in the MSBuild process so these
        additional hooks are provided. -->
   <Import Project="$(SourceRootPath)*.ProjectExtension.BeforeCommon.targets" />
-  <Import Project="$(PackagesRootPath)**\*.ProjectExtension.BeforeCommon.targets" />
+  <Import Project="$(BuildExtensionsRootPath)**\*.ProjectExtension.BeforeCommon.targets" />
 </Project>

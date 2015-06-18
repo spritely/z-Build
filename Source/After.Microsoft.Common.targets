@@ -12,5 +12,5 @@
   <!-- This is near the end of all our possible injection points and is probably the safest
        place to import additional build customizations. -->
   <Import Project="$(SourceRootPath)*.ProjectExtension.targets" />
-  <Import Project="$(PackagesRootPath)**\*.ProjectExtension.targets" />
+  <Import Project="$(BuildExtensionsRootPath)**\*.ProjectExtension.targets" />
 </Project>
